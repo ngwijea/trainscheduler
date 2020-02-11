@@ -19,9 +19,8 @@
     <title>Train Scheduler</title>
   </head>
 
-  <body class="wallpaper">
+  <body>
     <div class="container">
-        HTML
 <!-- Jumbotron -->
 <div class="jumbotron text-center">
 
@@ -44,9 +43,65 @@
 </div>
 <!-- Jumbotron -->
 
-      <div class="row">
-        <div id="train-view"></div>
-      </div>
+<!-- "Train Schdedule -->
+
+
+<div class="panel panel-primary text-dark">
+    <div class="panel-heading"><h3>Current Train Schedule</h3></div>
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Train Name</th>
+                    <th>Destination</th>
+                    <th>Next Arrival</th>
+                    <th>Frequency(min)</th>
+                    <th>Minutes Away</th>
+                </tr>
+            </thead>
+
+            <!-- Train info goes here! -->
+            <tbody id="add-row">
+            </tbody>
+            
+        </table>
+    </div>
+</div>
+
+<!-- Train input -->
+
+<div class="panel panel-primary text-dark">
+			<div class="panel-heading">
+				<h3>Add Train</h3>
+			</div>
+
+			<div class="panel-body">
+				<form>
+					<div class="form-group">
+						<label for="text">Train Name</label>
+						<input type="text" class="form-control" id="trainName">
+					</div>
+
+					<div class="form-group">
+						<label for="text">Destination</label>
+						<input type="text" class="form-control" id="destination">
+					</div>
+
+					<div class="form-group">
+						<label for="text">First Train Time</label>
+						<input type="text" class="form-control" id="firstTrain">
+					</div>
+
+					<div class="form-group">
+						<label for="text">Frequency(min)</label>
+						<input type="text" class="form-control" id="frequency">
+					</div>
+
+					<button type="submit" id="add-train" class="btn btn-primary">Submit</button>
+				</form>
+			</div>
+		</div>
+
 
 
   
@@ -54,8 +109,10 @@
     </div>
 
     <!-- Optional JavaScript -->
-    <!-- Firebase First, then jQuery, then Popper.js, then Bootstrap JS -->
+    <!-- Firebase First, then moment.js, jQuery, then Popper.js, then Bootstrap JS -->
     <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script
       src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
