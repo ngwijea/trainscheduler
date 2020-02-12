@@ -21,10 +21,18 @@ $("#add-train").on("click", function(event) {
   event.preventDefault();
 
   // Grab values from text-boxes
-  trainName = $("#trainName").val().trim();
-  destination = $("#destination").val().trim();
-  firstTrain = $("#firstTrain").val().trim();
-  frequency = $("#frequency").val().trim();
+  trainName = $("#trainName")
+    .val()
+    .trim();
+  destination = $("#destination")
+    .val()
+    .trim();
+  firstTrain = $("#firstTrain")
+    .val()
+    .trim();
+  frequency = $("#frequency")
+    .val()
+    .trim();
 
   // Code to push values to the database
   database.ref().push({
@@ -36,37 +44,40 @@ $("#add-train").on("click", function(event) {
   });
 });
 
-// Firebase watcher + initial loader HINT: This code behaves similarly to .on("value")
-database.ref().on("child_added",function(childSnapshot) {
-    var nextArr;
-    var minAway;
-    var firstTrainTime = moment(childSnapshot.val().firstTrain,"hh:mm").subtract(1, "years");
-    var calDiff = moment().diff(moment(firstTrainTime), "minutes");
-    var calRemain = calDiff % childSnapshot.val().frequency;
-    var minClose = childSnapshot.val().frequency - calRemain;
+database.ref().on(
+  "child_added",
+  function(childSnapshot) {
+    // var firstTrain = $("#firstTrain").val().trim();
+    var firstTrainTime = moment(firstTrain,"HH:mm").subtract(1, "years");
+    console.log("FIRST TRAIN TIME: " + firstTrainTime)
 
-    var upcomingTrain = moment().add(minClose, "minutes");
-    upcomingTrain = moment(upcomingTrain).format("hh:mm");
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
 
-    // Log everything that's coming out of snapshot
-    console.log(childSnapshot.val().trainName);
-    console.log(childSnapshot.val().destination);
-    console.log(childSnapshot.val().firstTrain);
-    console.log(childSnapshot.val().frequency);
-    console.log(childSnapshot.val().created);
+    var diffTime = moment().diff(moment(firstTrainTime), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    var tRemainder = diffTime % frequency;
+    console.log(tRemainder);
+
+    var tMinutesTillTrain = frequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    var upcomingTrain = moment().add(tMinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(upcomingTrain).format("hh:mm"));
 
     // full list of items to the well
     $("#add-row").append(
       "<tr><td>" +
-        childSnapshot.val().trainName +
+        trainName +
         "</td><td>" +
-        childSnapshot.val().destination +
-        "</td><td>" +
-        childSnapshot.val().frequency +
+        destination +
         "</td><td>" +
         upcomingTrain +
         "</td><td>" +
-        minClose +
+        frequency +
+        "</td><td>" +
+        tMinutesTillTrain +
         "</td></tr>"
     );
 
@@ -77,10 +88,10 @@ database.ref().on("child_added",function(childSnapshot) {
   }
 );
 
-database.ref().orderByChild("created").limitToLast(1).on("child_added", function(snapshot) {
-    // Change the HTML to reflect
-    $("#name-display").text(snapshot.val().trainName);
-    $("#email-display").text(snapshot.val().destination);
-    $("#age-display").text(snapshot.val().firstTrain);
-    $("#comment-display").text(snapshot.val().created);
-  });
+// database.ref().orderByChild("created").limitToLast(1).on("child_added", function(snapshot) {
+//     // Change the HTML to reflect
+//     $("#name-display").text(snapshot.val().trainName);
+//     $("#email-display").text(snapshot.val().destination);
+//     $("#age-display").text(snapshot.val().firstTrain);
+//     $("#comment-display").text(snapshot.val().created);
+//   });
