@@ -48,23 +48,24 @@ database.ref().on(
   "child_added",
   function(childSnapshot) {
     // var firstTrain = $("#firstTrain").val().trim();
-    var firstTrainTime = moment(firstTrain,"HH:mm").subtract(1, "years");
+    var firstTrainTime = moment(childSnapshot.val().firstTrain,"HH:mm").subtract(1, "years");
+    console.log(firstTrain)
     console.log("FIRST TRAIN TIME: " + firstTrainTime)
 
-    var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+    // var currentTime = moment();
+    console.log("CURRENT TIME: " + moment().format("hh:mm"));
 
     var diffTime = moment().diff(moment(firstTrainTime), "minutes");
     console.log("DIFFERENCE IN TIME: " + diffTime);
 
-    var tRemainder = diffTime % frequency;
+    var tRemainder = diffTime % childSnapshot.val().frequency;
     console.log(tRemainder);
 
-    var tMinutesTillTrain = frequency - tRemainder;
+    var tMinutesTillTrain = childSnapshot.val().frequency - tRemainder;
     console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
 
     var upcomingTrain = moment().add(tMinutesTillTrain, "minutes");
-    console.log("ARRIVAL TIME: " + moment(upcomingTrain).format("hh:mm"));
+    console.log("ARRIVAL TIME: " + upcomingTrain.format("hh:mm"));
 
     // full list of items to the well
     $("#add-row").append(
@@ -73,7 +74,7 @@ database.ref().on(
         "</td><td>" +
         destination +
         "</td><td>" +
-        upcomingTrain +
+        upcomingTrain.format("hh:mm") +
         "</td><td>" +
         frequency +
         "</td><td>" +
@@ -88,10 +89,4 @@ database.ref().on(
   }
 );
 
-// database.ref().orderByChild("created").limitToLast(1).on("child_added", function(snapshot) {
-//     // Change the HTML to reflect
-//     $("#name-display").text(snapshot.val().trainName);
-//     $("#email-display").text(snapshot.val().destination);
-//     $("#age-display").text(snapshot.val().firstTrain);
-//     $("#comment-display").text(snapshot.val().created);
-//   });
+
